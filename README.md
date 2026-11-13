@@ -19,9 +19,11 @@ npm run preview  # previsualizar el build
 1. **`src/data/site.js`** — completar los `TODO`:
    - Dominio real (también en `astro.config.mjs` → `site` y en `public/robots.txt`)
    - Email real
-   - **Access key de Web3Forms**: crear gratis en https://web3forms.com con el
-     email que recibe las consultas, y pegarla en `web3forms.accessKey`.
-     Sin eso el formulario no envía (WhatsApp funciona igual).
+   - **Access key de Web3Forms**: va en `.env` (copiar `.env.example` a
+     `.env` y completar `PUBLIC_WEB3FORMS_ACCESS_KEY`). Sin eso el
+     formulario no envía (WhatsApp funciona igual). Ojo: al ser un sitio
+     estático la key queda visible en el JS publicado (es una key pública
+     por diseño); el `.env` solo la mantiene fuera del repo.
 2. **Textos** — las descripciones de los complejos en `src/data/complejos.js`
    son un borrador: ajustar capacidades, servicios y datos reales.
 3. **Fotos** — ya están las que pasó el cliente, convertidas a WebP en

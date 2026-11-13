@@ -13,9 +13,9 @@ export const SITE = {
   email: 'contacto@puntanorte.com.ar', // TODO: email real
   instagram: '', // TODO: si tienen, URL completa
 
-  // Web3Forms (https://web3forms.com): crear la access key gratis con el
-  // email que recibe las consultas y pegarla acá. No expone el email.
+  // Web3Forms (https://web3forms.com): la access key vive en .env
+  // (PUBLIC_WEB3FORMS_ACCESS_KEY). Ver .env.example.
   web3forms: {
-    accessKey: '01318572-074e-4b89-a9cc-8ea8cd1230f8',
+    accessKey: import.meta.env.PUBLIC_WEB3FORMS_ACCESS_KEY,
   },
 };
