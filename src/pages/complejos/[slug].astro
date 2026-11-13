@@ -1,0 +1,229 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import BandaEmpresas from "../../components/BandaEmpresas.astro";
+import { COMPLEJOS } from "../../data/complejos.js";
+import { SITE } from "../../data/site.js";
+
+export function getStaticPaths() {
+    return COMPLEJOS.map((c) => ({ params: { slug: c.slug }, props: { complejo: c } }));
+}
+
+const { complejo: c } = Astro.props;
+
+const title = `${c.nombre} | Departamentos para empresas en ${c.ubicacion} — ${SITE.name}`;
+const description = `${c.resumen} ${c.departamentos} departamentos equipados en ${c.ubicacion}, ${c.localidad}. Cotizá la estadía de tu equipo.`;
+
+const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "LodgingBusiness",
+    name: `${SITE.name} — Complejo ${c.nombre}`,
+    description: c.resumen,
+    url: new URL(`/complejos/${c.slug}/`, SITE.url).href,
+    address: {
+        "@type": "PostalAddress",
+        addressLocality: c.ubicacion,
+        addressRegion: "Río Negro",
+        addressCountry: "AR",
+    },
+    numberOfRooms: c.departamentos,
+};
+
+const equipamiento = [
+    "Cocina completa con vajilla",
+    "Ropa blanca incluida",
+    "Calefacción",
+    "Wi-Fi",
+    "Limpieza periódica",
+    "Estacionamiento",
+];
+---
+
+<Layout title={title} description={description} jsonLd={jsonLd}>
+    <section class="detalle_hero">
+        <img src={c.imagen} alt={`Complejo ${c.nombre} en ${c.ubicacion}`} width="1600" height="900" />
+        <div class="detalle_hero_text">
+            <span class="eyebrow">{c.ubicacion} · {c.localidad}</span>
+            <h1>Complejo {c.nombre}</h1>
+            <p>{c.departamentos} departamentos · {c.capacidad}</p>
+        </div>
+    </section>
+
+    <section class="detalle container">
+        <div class="detalle_info">
+            <h2 class="section_title">Sobre el complejo</h2>
+            <p class="detalle_desc">{c.descripcion}</p>
+            <a class="btn btn_dark" href="/contacto/"><span>Cotizar estadía en {c.nombre}</span></a>
+        </div>
+        <aside class="detalle_amenities">
+            <h3>Equipamiento</h3>
+            <ul>
+                {equipamiento.map((e) => <li>{e}</li>)}
+            </ul>
+        </aside>
+    </section>
+
+    <section class="galeria container">
+        <span class="eyebrow">Galería</span>
+        <h2 class="section_title">Las unidades</h2>
+        <div class="galeria_grid">
+            {
+                c.galeria.map((img, i) => (
+                    <img
+                        src={img}
+                        alt={`Complejo ${c.nombre} — foto ${i + 1}`}
+                        loading="lazy"
+                        width="800"
+                        height="500"
+                    />
+                ))
+            }
+        </div>
+    </section>
+
+    <section class="mapa container">
+        <span class="eyebrow">Ubicación</span>
+        <h2 class="section_title">{c.ubicacion}, Río Negro</h2>
+        <div class="mapa_frame">
+            <iframe
+                src={`https://www.google.com/maps?q=${encodeURIComponent(c.mapsQuery)}&output=embed`}
+                title={`Mapa de ${c.ubicacion}`}
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                allowfullscreen
+            ></iframe>
+        </div>
+    </section>
+
+    <BandaEmpresas />
+</Layout>
+
+<style>
+    .detalle_hero {
+        position: relative;
+        background: var(--navy);
+    }
+
+    .detalle_hero img {
+        width: 100%;
+        height: 24rem;
+        object-fit: cover;
+        opacity: 0.45;
+    }
+
+    .detalle_hero_text {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 90%;
+        max-width: 1200px;
+        margin: 0 auto;
+        color: var(--white);
+    }
+
+    .detalle_hero_text h1 {
+        font-family: var(--font-display);
+        font-size: clamp(2.2rem, 5vw, 3.4rem);
+        font-weight: 500;
+        line-height: 1.1;
+    }
+
+    .detalle_hero_text p {
+        margin-top: 0.75rem;
+        font-size: 0.8rem;
+        font-weight: 300;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--white-70);
+    }
+
+    .detalle {
+        display: grid;
+        gap: 2.5rem;
+        padding: 4rem 0 1rem;
+    }
+
+    .detalle_desc {
+        margin: 1.75rem 0 2rem;
+        font-size: 0.92rem;
+        font-weight: 300;
+        line-height: 1.9;
+        color: var(--navy-60);
+        max-width: 62ch;
+    }
+
+    .detalle_amenities {
+        background: var(--white);
+        border: 1px solid var(--stone);
+        border-top: 2px solid var(--gold);
+        padding: 2rem 1.75rem;
+        align-self: start;
+    }
+
+    .detalle_amenities h3 {
+        font-family: var(--font-display);
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .detalle_amenities li {
+        font-size: 0.85rem;
+        font-weight: 300;
+        color: var(--navy-60);
+        padding: 0.5rem 0;
+        border-bottom: 1px solid var(--stone);
+    }
+
+    .detalle_amenities li:last-child {
+        border-bottom: none;
+    }
+
+    .galeria,
+    .mapa {
+        padding: 4rem 0 0;
+    }
+
+    .galeria_grid {
+        margin-top: 2.5rem;
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+
+    .galeria_grid img {
+        width: 100%;
+        aspect-ratio: 8 / 5;
+        object-fit: cover;
+    }
+
+    .mapa_frame {
+        margin-top: 2.5rem;
+        box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .mapa_frame iframe {
+        width: 100%;
+        height: 24rem;
+        display: block;
+        border: 0;
+        filter: grayscale(30%) contrast(1.05);
+        transition: filter 0.4s var(--ease);
+    }
+
+    .mapa_frame:hover iframe {
+        filter: grayscale(0%);
+    }
+
+    @media (min-width: 1024px) {
+        .detalle {
+            grid-template-columns: 1.6fr 1fr;
+            gap: 4rem;
+        }
+
+        .detalle_hero img {
+            height: 30rem;
+        }
+    }
+</style>

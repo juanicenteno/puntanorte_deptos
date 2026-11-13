@@ -1,0 +1,123 @@
+---
+import { COMPLEJOS, TOTAL_DEPARTAMENTOS } from "../data/complejos.js";
+const ubicaciones = [...new Set(COMPLEJOS.map((c) => c.ubicacion))];
+---
+
+<section class="hero">
+    <div class="hero_content">
+        <span class="eyebrow">Alojamiento corporativo · Río Negro</span>
+        <h1>Departamentos para empresas en la Costa Atlántica</h1>
+        <p>
+            {TOTAL_DEPARTAMENTOS} departamentos equipados en Playas Doradas y Las
+            Grutas para alojar a su personal en comisión, proyectos y obras.
+            Estadías extendidas, convenios y facturación para empresas.
+        </p>
+        <div class="hero_actions">
+            <a class="btn btn_light" href="/contacto/"><span>Cotizar estadía</span></a>
+            <a class="btn btn_light" href="#complejos"><span>Ver complejos</span></a>
+        </div>
+    </div>
+
+    <div class="hero_stats">
+        <div class="stat">
+            <strong>{TOTAL_DEPARTAMENTOS}</strong>
+            <span>Departamentos</span>
+        </div>
+        <div class="stat">
+            <strong>{COMPLEJOS.length}</strong>
+            <span>Complejos</span>
+        </div>
+        <div class="stat">
+            <strong>{ubicaciones.length}</strong>
+            <span>Ubicaciones</span>
+        </div>
+        <div class="stat">
+            <strong>24/7</strong>
+            <span>Atención</span>
+        </div>
+    </div>
+</section>
+
+<style>
+    .hero {
+        position: relative;
+        min-height: 82vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        background:
+            linear-gradient(to bottom, rgba(20, 36, 46, 0.55), rgba(20, 36, 46, 0.85)),
+            url('/img/hero.webp') center / cover no-repeat;
+        color: var(--white);
+    }
+
+    .hero_content {
+        width: 90%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 7rem 0 3.5rem;
+    }
+
+    .hero h1 {
+        font-family: var(--font-display);
+        font-size: clamp(2.2rem, 6vw, 3.8rem);
+        font-weight: 500;
+        line-height: 1.12;
+        max-width: 18ch;
+        margin-bottom: 1.25rem;
+    }
+
+    .hero p {
+        font-weight: 300;
+        font-size: 0.95rem;
+        line-height: 1.85;
+        color: var(--white-70);
+        max-width: 56ch;
+        margin-bottom: 2rem;
+    }
+
+    .hero_actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .hero_stats {
+        border-top: 1px solid rgba(255, 255, 255, 0.18);
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        width: 90%;
+        max-width: 1200px;
+        margin: 2.5rem auto 0;
+        padding: 1.5rem 0 2.5rem;
+        gap: 1.5rem;
+    }
+
+    .stat {
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+    }
+
+    .stat strong {
+        font-family: var(--font-display);
+        font-size: 2.2rem;
+        font-weight: 500;
+        color: var(--gold-lt);
+        line-height: 1;
+    }
+
+    .stat span {
+        font-size: 0.65rem;
+        font-weight: 400;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--white-70);
+    }
+
+    @media (min-width: 768px) {
+        .hero_stats {
+            grid-template-columns: repeat(4, 1fr);
+        }
+    }
+</style>

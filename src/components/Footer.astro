@@ -1,0 +1,123 @@
+---
+import { SITE } from "../data/site.js";
+import { COMPLEJOS, TOTAL_DEPARTAMENTOS } from "../data/complejos.js";
+const year = new Date().getFullYear();
+---
+
+<footer>
+    <div class="container footer_grid">
+        <div class="footer_brand">
+            <img
+                class="footer_logo_img"
+                src="/img/logo-white.webp"
+                alt="Punta Norte Departamentos"
+                width="800"
+                height="297"
+                loading="lazy"
+            />
+            <p class="footer_desc">
+                {TOTAL_DEPARTAMENTOS} departamentos equipados para empresas en la
+                Costa Atlántica de Río Negro. Del mismo grupo que Ayres de Calafate
+                y Ayres Dorados Lodge.
+            </p>
+        </div>
+
+        <nav class="footer_nav" aria-label="Complejos">
+            <p class="footer_title">Complejos</p>
+            <ul>
+                {
+                    COMPLEJOS.map((c) => (
+                        <li>
+                            <a href={`/complejos/${c.slug}/`}>
+                                {c.nombre} — {c.ubicacion}
+                            </a>
+                        </li>
+                    ))
+                }
+            </ul>
+        </nav>
+
+        <div class="footer_contact">
+            <p class="footer_title">Contacto</p>
+            <ul>
+                <li>
+                    <a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noopener">
+                        WhatsApp: {SITE.whatsappDisplay}
+                    </a>
+                </li>
+                <li><a href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
+                <li><a href="/contacto/">Solicitar cotización</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer_bottom">
+        <p>© {year} {SITE.name} · Playas Doradas &amp; Las Grutas, Río Negro, Argentina</p>
+    </div>
+</footer>
+
+<style>
+    footer {
+        background: var(--navy);
+        color: var(--white-70);
+        margin-top: 5rem;
+    }
+
+    .footer_grid {
+        display: grid;
+        gap: 2.5rem;
+        padding: 3.5rem 0 2.5rem;
+    }
+
+    .footer_logo_img {
+        width: 14rem;
+        height: auto;
+    }
+
+    .footer_desc {
+        margin-top: 1rem;
+        font-size: 0.85rem;
+        font-weight: 300;
+        line-height: 1.8;
+        max-width: 34ch;
+    }
+
+    .footer_title {
+        font-size: 0.68rem;
+        font-weight: 500;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--gold-lt);
+        margin-bottom: 1rem;
+    }
+
+    footer ul {
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+    }
+
+    footer ul a {
+        font-size: 0.85rem;
+        font-weight: 300;
+        transition: color 0.3s var(--ease);
+    }
+
+    footer ul a:hover {
+        color: var(--gold-lt);
+    }
+
+    .footer_bottom {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 1.25rem 5%;
+        text-align: center;
+        font-size: 0.72rem;
+        font-weight: 300;
+        letter-spacing: 0.08em;
+    }
+
+    @media (min-width: 768px) {
+        .footer_grid {
+            grid-template-columns: 1.4fr 1fr 1fr;
+        }
+    }
+</style>

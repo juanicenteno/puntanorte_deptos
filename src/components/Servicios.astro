@@ -1,0 +1,94 @@
+---
+const servicios = [
+    {
+        titulo: "Equipamiento completo",
+        texto: "Cocina equipada, ropa blanca, calefacción y todo listo para entrar a vivir desde el primer día.",
+    },
+    {
+        titulo: "Estadías extendidas",
+        texto: "Tarifas pensadas para semanas o meses, con condiciones especiales por volumen y permanencia.",
+    },
+    {
+        titulo: "Facturación para empresas",
+        texto: "Emitimos factura y trabajamos con órdenes de compra y convenios corporativos.",
+    },
+    {
+        titulo: "Limpieza y mantenimiento",
+        texto: "Servicio de limpieza periódica y resolución de mantenimiento sin trámites para su equipo.",
+    },
+    {
+        titulo: "Ubicación estratégica",
+        texto: "A minutos de Sierra Grande, Punta Colorada, San Antonio Oeste y el puerto de San Antonio Este.",
+    },
+    {
+        titulo: "Un solo interlocutor",
+        texto: "Centralizamos la gestión de todas las unidades: un contacto para toda la operación de alojamiento.",
+    },
+];
+---
+
+<section class="servicios container">
+    <span class="eyebrow">Por qué Punta Norte</span>
+    <h2 class="section_title">Pensado para la operación de su empresa</h2>
+    <div class="grid">
+        {
+            servicios.map((s) => (
+                <article>
+                    <h3>{s.titulo}</h3>
+                    <p>{s.texto}</p>
+                </article>
+            ))
+        }
+    </div>
+</section>
+
+<style>
+    .servicios {
+        padding: 5rem 0 1rem;
+    }
+
+    .grid {
+        margin-top: 3rem;
+        display: grid;
+        gap: 1.25rem;
+    }
+
+    article {
+        background: var(--white);
+        border: 1px solid var(--stone);
+        border-top: 2px solid var(--gold);
+        padding: 2rem 1.75rem;
+        transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+    }
+
+    article:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 32px rgba(20, 36, 46, 0.1);
+    }
+
+    h3 {
+        font-family: var(--font-display);
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+    }
+
+    p {
+        font-size: 0.85rem;
+        font-weight: 300;
+        line-height: 1.8;
+        color: var(--navy-60);
+    }
+
+    @media (min-width: 768px) {
+        .grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (min-width: 1024px) {
+        .grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+</style>

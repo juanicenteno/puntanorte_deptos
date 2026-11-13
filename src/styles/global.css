@@ -1,0 +1,154 @@
+/* ════════════════════════════════════════════════════════════════════
+   PUNTA NORTE — tokens de diseño
+   Familia Ayres (crema + dorado) con primario azul petróleo corporativo
+════════════════════════════════════════════════════════════════════ */
+:root {
+    --cream: #f5f2ec;
+    --stone: #e7e1d6;
+    --navy: #14242e;
+    --navy-2: #1d3340;
+    --navy-60: rgba(20, 36, 46, 0.6);
+    --navy-30: rgba(20, 36, 46, 0.28);
+    --gold: #b08d57;
+    --gold-lt: #c9a96e;
+    --white: #ffffff;
+    --white-70: rgba(255, 255, 255, 0.72);
+    --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --font-display: 'Cormorant Garamond', serif;
+    --font-sans: 'Jost', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    border: none;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--cream);
+    font-family: var(--font-sans);
+    color: var(--navy);
+    -webkit-font-smoothing: antialiased;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+ul,
+li {
+    list-style: none;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+/* ─── utilidades compartidas ─────────────────────────────────────── */
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.eyebrow {
+    display: block;
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.75rem;
+}
+
+.section_title {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: 0.01em;
+    color: var(--navy);
+}
+
+.section_title::after {
+    content: '';
+    display: block;
+    width: 3rem;
+    height: 1px;
+    background: var(--gold);
+    margin-top: 1rem;
+}
+
+/* botón primario: barrido dorado (mismo gesto que ayres_dorados) */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 0.9rem 2.2rem;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.35s var(--ease), color 0.35s var(--ease);
+}
+
+.btn span {
+    position: relative;
+    z-index: 1;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gold);
+    transform: translateX(-101%);
+    transition: transform 0.4s var(--ease);
+}
+
+.btn:hover::before {
+    transform: translateX(0);
+}
+
+.btn_light {
+    color: var(--white);
+    border: 1px solid rgba(255, 255, 255, 0.45);
+}
+
+.btn_light:hover {
+    border-color: var(--gold);
+}
+
+.btn_dark {
+    color: var(--navy);
+    border: 1px solid var(--navy-30);
+}
+
+.btn_dark:hover {
+    border-color: var(--gold);
+    color: var(--white);
+}
+
+.btn_solid {
+    color: var(--white);
+    background: var(--navy);
+    border: 1px solid var(--navy);
+}
+
+@media (min-width: 768px) {
+    .section_title {
+        font-size: 2.5rem;
+    }
+}

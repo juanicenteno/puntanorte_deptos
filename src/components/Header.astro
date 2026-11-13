@@ -1,0 +1,195 @@
+---
+import { COMPLEJOS } from "../data/complejos.js";
+const pathname = Astro.url.pathname.replace(/\/$/, "");
+---
+
+<header id="header">
+    <div class="content_header container">
+        <a href="/" class="logo" aria-label="Punta Norte — Inicio">
+            <img
+                src="/img/logo.webp"
+                alt="Punta Norte Departamentos"
+                width="800"
+                height="297"
+            />
+        </a>
+
+        <nav class="nav_desktop" aria-label="Navegación principal">
+            <ul>
+                <li><a href="/" class={pathname === "" ? "active" : ""}>Inicio</a></li>
+                {
+                    COMPLEJOS.map((c) => (
+                        <li>
+                            <a
+                                href={`/complejos/${c.slug}/`}
+                                class={pathname === `/complejos/${c.slug}` ? "active" : ""}
+                            >
+                                {c.nombre}
+                            </a>
+                        </li>
+                    ))
+                }
+                <li><a href="/contacto/" class={`cta ${pathname === "/contacto" ? "active" : ""}`}>Cotizar estadía</a></li>
+            </ul>
+        </nav>
+
+        <button class="burger" aria-label="Abrir menú de navegación" aria-expanded="false">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
+            </svg>
+        </button>
+    </div>
+
+    <nav class="nav_mobile" aria-label="Navegación móvil">
+        <ul>
+            <li><a href="/" class={pathname === "" ? "active" : ""}>Inicio</a></li>
+            {
+                COMPLEJOS.map((c) => (
+                    <li>
+                        <a
+                            href={`/complejos/${c.slug}/`}
+                            class={pathname === `/complejos/${c.slug}` ? "active" : ""}
+                        >
+                            {c.nombre}
+                        </a>
+                    </li>
+                ))
+            }
+            <li><a href="/contacto/" class={pathname === "/contacto" ? "active" : ""}>Cotizar estadía</a></li>
+        </ul>
+    </nav>
+</header>
+
+<script>
+    document.addEventListener("astro:page-load", () => {
+        const header = document.getElementById("header");
+        const btn = header?.querySelector(".burger");
+        const nav = header?.querySelector(".nav_mobile");
+
+        btn?.addEventListener("click", () => {
+            const open = nav?.classList.toggle("active");
+            btn.setAttribute("aria-expanded", open ? "true" : "false");
+        });
+    });
+</script>
+
+<style>
+    header {
+        width: 100%;
+        background: var(--cream);
+        border-bottom: 1px solid var(--stone);
+        position: relative;
+        z-index: 10;
+    }
+
+    .content_header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 5.5rem;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+    }
+
+    .logo img {
+        width: auto;
+        height: 3.4rem;
+    }
+
+    .nav_desktop {
+        display: none;
+    }
+
+    .burger {
+        background: none;
+        color: var(--navy);
+        cursor: pointer;
+    }
+
+    .burger svg {
+        width: 2rem;
+    }
+
+    .nav_mobile {
+        overflow: hidden;
+        max-height: 0;
+        background: var(--navy);
+        transition: max-height 0.35s var(--ease);
+    }
+
+    .nav_mobile.active {
+        max-height: 22rem;
+    }
+
+    .nav_mobile ul {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        padding: 1.25rem 5%;
+    }
+
+    .nav_mobile a {
+        display: block;
+        padding: 0.6rem 0;
+        color: var(--white-70);
+        font-size: 0.8rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+    }
+
+    .nav_mobile a.active {
+        color: var(--gold-lt);
+    }
+
+    @media (min-width: 1024px) {
+        .burger,
+        .nav_mobile {
+            display: none;
+        }
+
+        .nav_desktop {
+            display: block;
+        }
+
+        .nav_desktop ul {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+        }
+
+        .nav_desktop a {
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--navy);
+            transition: color 0.3s var(--ease);
+            padding-bottom: 0.3rem;
+        }
+
+        .nav_desktop a:hover {
+            color: var(--gold);
+        }
+
+        .nav_desktop a.active {
+            color: var(--gold);
+            border-bottom: 1px solid var(--gold);
+        }
+
+        .nav_desktop a.cta {
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            padding: 0.7rem 1.5rem;
+            transition: all 0.3s var(--ease);
+        }
+
+        .nav_desktop a.cta:hover,
+        .nav_desktop a.cta.active {
+            background: var(--gold);
+            color: var(--white);
+        }
+    }
+</style>

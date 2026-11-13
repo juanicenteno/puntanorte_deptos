@@ -1,0 +1,270 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { SITE } from "../data/site.js";
+import { COMPLEJOS } from "../data/complejos.js";
+
+const title = `Cotizar estadía | ${SITE.name} — Alojamiento para empresas`;
+const description =
+    "Solicitá una cotización para alojar a tu equipo en Playas Doradas o Las Grutas. Respondemos por email o WhatsApp con disponibilidad y tarifas corporativas.";
+const msg = encodeURIComponent("Hola, quiero cotizar alojamiento para mi empresa.");
+---
+
+<Layout title={title} description={description}>
+    <section class="contacto container">
+        <div class="contacto_intro">
+            <span class="eyebrow">Contacto</span>
+            <h1 class="section_title">Cotizá la estadía de tu equipo</h1>
+            <p>
+                Contanos cuántas personas viajan, a qué zona y por cuánto
+                tiempo. Te respondemos con disponibilidad, tarifa corporativa y
+                condiciones de facturación.
+            </p>
+            <ul class="contacto_alt">
+                <li>
+                    <a href={`https://wa.me/${SITE.whatsapp}?text=${msg}`} target="_blank" rel="noopener">
+                        WhatsApp: {SITE.whatsappDisplay}
+                    </a>
+                </li>
+                <li><a href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
+            </ul>
+        </div>
+
+        <form id="quote_form" novalidate>
+            <!-- honeypot antispam de Web3Forms: oculto para humanos -->
+            <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+            <div class="row">
+                <label>
+                    Nombre y apellido *
+                    <input type="text" name="nombre" required autocomplete="name" />
+                </label>
+                <label>
+                    Empresa *
+                    <input type="text" name="empresa" required autocomplete="organization" />
+                </label>
+            </div>
+            <div class="row">
+                <label>
+                    Email *
+                    <input type="email" name="email" required autocomplete="email" />
+                </label>
+                <label>
+                    Teléfono
+                    <input type="tel" name="telefono" autocomplete="tel" />
+                </label>
+            </div>
+            <div class="row">
+                <label>
+                    Zona / complejo
+                    <select name="complejo">
+                        <option value="Indistinto">Indistinto</option>
+                        {
+                            COMPLEJOS.map((c) => (
+                                <option value={`${c.nombre} (${c.ubicacion})`}>
+                                    {c.nombre} — {c.ubicacion}
+                                </option>
+                            ))
+                        }
+                    </select>
+                </label>
+                <label>
+                    Cantidad de personas
+                    <input type="number" name="personas" min="1" max="99" />
+                </label>
+            </div>
+            <label>
+                Fechas estimadas
+                <input type="text" name="fechas" placeholder="Ej: 15/01 al 15/03, o 'por 6 meses desde febrero'" />
+            </label>
+            <label>
+                Mensaje
+                <textarea name="mensaje" rows="5" placeholder="Contanos sobre el proyecto u operación..."></textarea>
+            </label>
+            <button class="btn btn_solid" type="submit"><span>Enviar consulta</span></button>
+            <p class="form_status" role="status" aria-live="polite"></p>
+        </form>
+    </section>
+</Layout>
+
+<script>
+    import { SITE } from "../data/site.js";
+
+    document.addEventListener("astro:page-load", () => {
+        const form = document.getElementById("quote_form") as HTMLFormElement | null;
+        if (!form) return;
+        const status = form.querySelector(".form_status") as HTMLElement;
+        const btn = form.querySelector("button") as HTMLButtonElement;
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            btn.disabled = true;
+            status.textContent = "Enviando...";
+            status.className = "form_status";
+
+            const data = Object.fromEntries(new FormData(form).entries());
+
+            try {
+                // Web3Forms — sin backend ni SDK: POST directo con la access key
+                const res = await fetch("https://api.web3forms.com/submit", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", Accept: "application/json" },
+                    body: JSON.stringify({
+                        access_key: SITE.web3forms.accessKey,
+                        subject: `Cotización web — ${data.empresa || "sin empresa"}`,
+                        from_name: "Punta Norte (web)",
+                        ...data,
+                    }),
+                });
+                const json = await res.json();
+                if (!res.ok || !json.success) throw new Error(json.message);
+                status.textContent = "¡Consulta enviada! Te respondemos a la brevedad.";
+                status.classList.add("ok");
+                form.reset();
+            } catch {
+                status.textContent =
+                    "No se pudo enviar. Probá de nuevo o escribinos por WhatsApp.";
+                status.classList.add("error");
+            } finally {
+                btn.disabled = false;
+            }
+        });
+    });
+</script>
+
+<style>
+    .contacto {
+        display: grid;
+        gap: 3rem;
+        padding: 4.5rem 0 1rem;
+    }
+
+    .contacto_intro p {
+        margin: 1.75rem 0;
+        font-size: 0.92rem;
+        font-weight: 300;
+        line-height: 1.9;
+        color: var(--navy-60);
+        max-width: 48ch;
+    }
+
+    .contacto_alt {
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+    }
+
+    .contacto_alt a {
+        font-size: 0.88rem;
+        font-weight: 400;
+        color: var(--navy);
+        border-bottom: 1px solid var(--gold);
+        padding-bottom: 0.15rem;
+        transition: color 0.3s var(--ease);
+        width: fit-content;
+        display: inline-block;
+    }
+
+    .contacto_alt a:hover {
+        color: var(--gold);
+    }
+
+    .hp {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    form {
+        position: relative;
+        background: var(--white);
+        border: 1px solid var(--stone);
+        border-top: 2px solid var(--gold);
+        padding: 2.25rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+    }
+
+    .row {
+        display: grid;
+        gap: 1.25rem;
+    }
+
+    label {
+        display: flex;
+        flex-direction: column;
+        gap: 0.45rem;
+        font-size: 0.68rem;
+        font-weight: 500;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--navy);
+    }
+
+    input,
+    select,
+    textarea {
+        font-family: var(--font-sans);
+        font-size: 0.9rem;
+        font-weight: 300;
+        color: var(--navy);
+        background: var(--cream);
+        border: 1px solid var(--stone);
+        padding: 0.8rem 1rem;
+        outline: none;
+        transition: border-color 0.3s var(--ease);
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+        border-color: var(--gold);
+    }
+
+    textarea {
+        resize: vertical;
+    }
+
+    button {
+        align-self: flex-start;
+    }
+
+    button:disabled {
+        opacity: 0.6;
+        pointer-events: none;
+    }
+
+    .form_status {
+        font-size: 0.85rem;
+        font-weight: 400;
+        min-height: 1.2em;
+    }
+
+    .form_status.ok {
+        color: #2e7d4f;
+    }
+
+    .form_status.error {
+        color: #b3391f;
+    }
+
+    @media (min-width: 640px) {
+        .row {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
+    @media (min-width: 1024px) {
+        .contacto {
+            grid-template-columns: 1fr 1.3fr;
+            gap: 4rem;
+            align-items: start;
+        }
+    }
+</style>
